@@ -1,8 +1,8 @@
-package com.example.ojcodesandbox.controller;
+package com.l0v3ch4n.ojcodesandbox.controller;
 
-import com.example.ojcodesandbox.JavaNativeCodeSandbox;
-import com.example.ojcodesandbox.model.ExecuteCodeRequest;
-import com.example.ojcodesandbox.model.ExecuteCodeResponse;
+import com.l0v3ch4n.ojcodesandbox.JavaNativeCodeSandbox;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeRequest;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeResponse;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ public class MainController {
     // 定义鉴权请求头和密钥
     private static final String AUTH_REQUEST_HEADER = "auth";
 
-    private static final String AUTH_REQUEST_SECRET = "secretKey";
+    private static final String AUTH_REQUEST_SECRET = "L0v3ch4n";
 
     @Resource
     private JavaNativeCodeSandbox javaNativeCodeSandbox;

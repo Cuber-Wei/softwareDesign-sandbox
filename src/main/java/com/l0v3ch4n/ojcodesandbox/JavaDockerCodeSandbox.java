@@ -1,16 +1,17 @@
-package com.example.ojcodesandbox;
+package com.l0v3ch4n.ojcodesandbox;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ArrayUtil;
-import com.example.ojcodesandbox.model.ExecuteCodeRequest;
-import com.example.ojcodesandbox.model.ExecuteCodeResponse;
-import com.example.ojcodesandbox.model.ExecuteMessage;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeRequest;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeResponse;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
@@ -23,8 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
-public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
+public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate implements CodeSandbox {
 
     private static final long TIME_OUT = 5000L;
 
@@ -43,6 +45,29 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
         System.out.println(executeCodeResponse);
     }
 
+    @Override
+    public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
+        List<String> inputList = executeCodeRequest.getInputList();
+        String code = executeCodeRequest.getCode();
+        String language = executeCodeRequest.getLanguage();
+
+//        1. 把用户的代码保存为文件
+        File userCodeFile = saveCodeToFile(code);
+
+        // 3. 执行代码，得到输出结果
+        List<ExecuteMessage> executeMessageList = runFile(userCodeFile, inputList);
+
+//        4. 收集整理输出结果
+        ExecuteCodeResponse outputResponse = getOutputResponse(executeMessageList);
+
+//        5. 文件清理
+        boolean b = deleteFile(userCodeFile);
+        if (!b) {
+            log.error("deleteFile error, userCodeFilePath = {}", userCodeFile.getAbsolutePath());
+        }
+        return outputResponse;
+    }
+
     /**
      * 3、创建容器，把文件复制到容器内
      *
@@ -52,6 +77,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
      */
     @Override
     public List<ExecuteMessage> runFile(File userCodeFile, List<String> inputList) {
+        System.out.println("Docker");
         String userCodeParentPath = userCodeFile.getParentFile().getAbsolutePath();
         // 获取默认的 Docker Client
         DockerClient dockerClient = DockerClientBuilder.getInstance().build();
@@ -86,7 +112,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
         hostConfig.withMemory(100 * 1000 * 1000L);
         hostConfig.withMemorySwap(0L);
         hostConfig.withCpuCount(1L);
-        hostConfig.withSecurityOpts(Arrays.asList("seccomp=安全管理配置字符串"));
+        hostConfig.withSecurityOpts(List.of("seccomp=安全管理配置字符串"));
         hostConfig.setBinds(new Bind(userCodeParentPath, new Volume("/app")));
         CreateContainerResponse createContainerResponse = containerCmd
                 .withHostConfig(hostConfig)

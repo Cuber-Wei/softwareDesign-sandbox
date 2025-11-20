@@ -1,7 +1,7 @@
-package com.example.ojcodesandbox;
+package com.l0v3ch4n.ojcodesandbox;
 
-import com.example.ojcodesandbox.model.ExecuteCodeRequest;
-import com.example.ojcodesandbox.model.ExecuteCodeResponse;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeRequest;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteCodeResponse;
 
 /**
  * 代码沙箱接口定义

@@ -1,4 +1,4 @@
-package com.example.ojcodesandbox.unsafe;
+package com.l0v3ch4n.ojcodesandbox.unsafe;
 
 /**
  * 无限睡眠（阻塞程序执行）

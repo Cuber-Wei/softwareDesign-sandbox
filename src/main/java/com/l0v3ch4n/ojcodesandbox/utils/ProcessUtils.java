@@ -1,7 +1,7 @@
-package com.example.ojcodesandbox.utils;
+package com.l0v3ch4n.ojcodesandbox.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.example.ojcodesandbox.model.ExecuteMessage;
+import com.l0v3ch4n.ojcodesandbox.model.ExecuteMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.StopWatch;
 
@@ -89,7 +89,7 @@ public class ProcessUtils {
             OutputStream outputStream = runProcess.getOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
             String[] s = args.split(" ");
-            String join = StrUtil.join("\n", s) + "\n";
+            String join = StrUtil.join("\n", (Object) s) + "\n";
             outputStreamWriter.write(join);
             // 相当于按了回车，执行输入的发送
             outputStreamWriter.flush();

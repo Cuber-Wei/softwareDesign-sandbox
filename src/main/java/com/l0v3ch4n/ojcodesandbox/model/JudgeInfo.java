@@ -1,4 +1,4 @@
-package com.example.ojcodesandbox.model;
+package com.l0v3ch4n.ojcodesandbox.model;
 
 import lombok.Data;
 
